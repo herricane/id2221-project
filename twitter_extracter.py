@@ -1,4 +1,3 @@
-import sys
 import json
 import tweepy
 import pykafka
@@ -56,8 +55,7 @@ def twitter_setup():
 
 
 if __name__ == "__main__":
-    # take topic as the second argument from command line
-    topic = sys.argv[1]
+    topic = "twitter"
 
     api = twitter_setup()
     twitter_stream = tweepy.Stream(api.auth, KafkaStreamListener(topic))
