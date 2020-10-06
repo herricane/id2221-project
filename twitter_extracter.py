@@ -1,7 +1,7 @@
 import json
 import tweepy
 import pykafka
-from credentials import *
+from twitter_credentials import *
 
 
 class KafkaStreamListener(tweepy.StreamListener):
@@ -20,10 +20,14 @@ class KafkaStreamListener(tweepy.StreamListener):
         """
         data_json = json.loads(data)
         urls = data_json["entities"]["urls"]
-        if (len(urls) > 0):
-            data_url = urls[0]["expanded_url"]
-            print(data_url)
-            self.producer.produce(bytes(data_url, encoding="utf8"))
+        for url in urls:
+            expanded_url = url["expanded_url"]
+            if "open.spotify.com/track" in expanded_url:
+                # extract the track ID from the url
+                track_id = expanded_url[31:53]
+                print(track_id)
+                self.producer.produce(bytes(track_id, encoding="utf8"))
+                break
         return True
 
     def on_error(self, status_code):
@@ -59,4 +63,4 @@ if __name__ == "__main__":
 
     api = twitter_setup()
     twitter_stream = tweepy.Stream(api.auth, KafkaStreamListener(topic))
-    twitter_stream.filter(languages=["en"], track=["open spotify com"])
+    twitter_stream.filter(languages=["en"], track=["open spotify com track"])
