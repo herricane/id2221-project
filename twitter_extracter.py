@@ -1,7 +1,7 @@
 import json
 import tweepy
 import pykafka
-from twitter_credentials import *
+from credentials import *
 
 
 class KafkaStreamListener(tweepy.StreamListener):
