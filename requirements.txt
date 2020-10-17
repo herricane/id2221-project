@@ -2,4 +2,5 @@ tweepy==3.9.0
 pykafka==2.8.0
 spotipy==2.16.0
 cassandra-driver==3.24.0
-pyspark==3.0.1
+pyspark==2.4.6
+influxdb==5.3.0
