@@ -20,7 +20,7 @@ def create_stream():
 
 
 if __name__ == "__main__":
-
+    os.environ['PYSPARK_PYTHON'] = '/usr/bin/python3'
     os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.0.2,anguenot/pyspark-cassandra:2.4.0 pyspark-shell'
 
     # Connect to cassandra
