@@ -5,11 +5,6 @@ from influxdb import InfluxDBClient
 import datetime
 from time import sleep
 
-client = InfluxDBClient()
-client.create_database('<database>')
-
-cluster = Cluster(['localhost'])
-session = cluster.connect('<FILL IN keyspace>')
 
 def data_transfer():
     while(True):
@@ -38,5 +33,12 @@ def influxdb_append(rows):
         points.append(point)
     client.write_points(database='<database>', points=points)
 
+
 if __name__ == '__main__':
+    client = InfluxDBClient()
+    client.create_database('<database>')
+
+    cluster = Cluster(['localhost'])
+    session = cluster.connect('<FILL IN keyspace>')
+
     data_transfer()

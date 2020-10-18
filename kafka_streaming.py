@@ -1,3 +1,5 @@
+import os
+import json
 import logging
 from cassandra.cluster import Cluster
 from pyspark import SparkContext, SparkConf
@@ -5,10 +7,8 @@ from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
 import pyspark_cassandra
 from pyspark_cassandra import streaming
-import json
-import os
-from spotify_caller import *
 
+from spotify_caller import *
 
 
 def create_stream():
@@ -17,6 +17,7 @@ def create_stream():
     conf = SparkConf().setAppName(appName).setMaster(master)
     sc = SparkContext(conf=conf)
     return sc
+
 
 if __name__ == "__main__":
 
@@ -27,7 +28,6 @@ if __name__ == "__main__":
     session = cluster.connect()
     KEYSPACE = "mykeyspace1"
     TABLE = "mytable1"
-
     
     if KEYSPACE not in cluster.metadata.keyspaces:
         q = "CREATE KEYSPACE " + KEYSPACE + " WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '1' };"
@@ -36,9 +36,6 @@ if __name__ == "__main__":
     session.set_keyspace(KEYSPACE)
     q = "CREATE TABLE IF NOT EXISTS " + KEYSPACE + "." + TABLE +  " (time text, track_name text, artist text, genres text, PRIMARY KEY(track_name));"
     session.execute(q)
-
-    
-
 
     # Create a StreamingContext with batch interval of 3 second
     sc = create_stream()
@@ -58,13 +55,8 @@ if __name__ == "__main__":
                                 "genres": spotify.get_info(track_id=v['track_id'])['genres']})
     rows.pprint()
 
-
     # Save to Cassandra
     rows.saveToCassandra(KEYSPACE,TABLE)
 
-
     ssc.start()
     ssc.awaitTermination()
-
-
-
