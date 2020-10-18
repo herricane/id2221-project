@@ -19,6 +19,6 @@ class SpotifyClient(object):
         try:
             genres = artist_info['genres'][0] # first genre
         except:
-            genres = None
+            genres = ''
 
         return {'name': track_name, 'artist': artist_name, 'genres': genres}
