@@ -27,7 +27,7 @@ if __name__ == "__main__":
     cluster = Cluster(['127.0.0.1'])
     session = cluster.connect()
     KEYSPACE = "mykeyspace1"
-    TABLE = "mytable1"
+    TABLE = "mytable2"
     
     if KEYSPACE not in cluster.metadata.keyspaces:
         q = "CREATE KEYSPACE " + KEYSPACE + " WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '1' };"

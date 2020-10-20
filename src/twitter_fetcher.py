@@ -1,6 +1,7 @@
 import json
 import tweepy
 import pykafka
+import datetime
 from credentials import *
 
 
@@ -24,10 +25,11 @@ class KafkaStreamListener(tweepy.StreamListener):
             expanded_url = url['expanded_url']
             if 'open.spotify.com/track' in expanded_url:
                 # extract the track ID from the url
-                time = data_json['created_at'][11:19]
+                time = data_json['created_at']
+                time = str(datetime.datetime.strptime(time, '%a %b %d %H:%M:%S %z %Y').timestamp()).split('.')[0]
                 track_id = expanded_url[31:53]
                 print(time)
-                print(track_id)
+                print(expanded_url)
                 info = json.dumps({'time': time, 'track_id': track_id})
                 self.producer.produce(bytes(info, encoding="utf8"))
                 break
