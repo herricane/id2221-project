@@ -27,7 +27,9 @@ class KafkaStreamListener(tweepy.StreamListener):
                 # extract the track ID from the url
                 time = data_json['created_at']
                 time = str(datetime.datetime.strptime(time, '%a %b %d %H:%M:%S %z %Y').timestamp()).split('.')[0]
-                track_id = expanded_url[31:53]
+                index = expanded_url.find('open.spotify.com/track/')
+                track_id = expanded_url[index+23:index+45]
+                #track_id = expanded_url[31:53]
                 print(time)
                 print(expanded_url)
                 info = json.dumps({'time': time, 'track_id': track_id})
